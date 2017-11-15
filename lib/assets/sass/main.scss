@@ -1,0 +1,315 @@
+@import '~perx-uikit/assets/sass/main';
+
+//* {
+//    animation-duration: 0s !important;
+//}
+
+fieldset {
+  border: none;
+}
+
+#form-service-admin  {
+  height: 100%;
+  min-width: 1200px;
+}
+
+.contentWrapper {
+  min-height: initial;
+  & > div {
+    min-height: initial;
+  }
+}
+
+.crud-form {
+  padding: 0 20px 20px 20px;
+
+  &__content {
+    margin-top: 30px;
+  }
+  &__button {
+    margin-left: 8px;
+  }
+}
+
+:root .ant-collapse {
+  border: 1px solid #d9d9d9;
+  border-radius: 0;
+
+  & > .ant-collapse-item {
+    outline: 1px solid #d9d9d9;
+    box-sizing: content-box;
+    padding: 0;
+    position: relative;
+    border: none;
+    background-color: #fff;
+
+    & > .ant-collapse-header {
+      padding-left: 15px;
+      display: flex;
+
+      & > div {
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 85%;
+      }
+
+      & .arrow {
+        order: 2;
+        position: initial;
+        margin-left: 10px;
+      }
+    }
+  }
+}
+
+.sortable {
+  &__header {
+    order: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  &__helper {
+    z-index: 1000 !important;
+    box-shadow: 0 0 7px 0 rgba(0,0,0,.2);
+    height: 38px;
+    line-height: 38px;
+    display: block;
+    align-items: center;
+    padding-left: 15px;
+    box-sizing: border-box;
+
+    & .sortable__label {
+      max-width: 81%;
+    }
+  }
+
+  &__label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__checkbox {
+    position: absolute;
+    right: 15px;
+    display: inline-flex;
+  }
+
+  &__drag-handler {
+    width: 18px;
+    height: 18px;
+    background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50"><path d="M0 7.5v5h50v-5H0zm0 15v5h50v-5H0zm0 15v5h50v-5H0z" color="#000"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: .25;
+    margin-right: 15px;
+    cursor: ns-resize;
+    display: table;
+  }
+
+//  &__drag-handler-mock {
+//    width: 18px;
+//    height: 18px;
+//    margin-right: 15px;
+//    display: table;
+//  }
+}
+
+.ant-input-number {
+  width: 100%;
+}
+
+.fields__datasource-selector {
+  margin-bottom: 10px;
+}
+
+.fields__field {
+  margin-bottom: 10px;
+}
+
+.fields__field-title {
+  margin-bottom: 10px;
+}
+
+.table__cell-text {
+//  max-width: 40ch;
+  word-break: break-all;
+}
+
+.builder {
+  overflow: hidden;
+
+  &__form {
+    margin-top: 21px;
+  }
+
+  &__wrapper {
+    min-width: 1000px;
+  }
+
+  &__buttons {
+    margin-top: 20px;
+
+    &_remove {
+      margin-left: 15px;
+    }
+  }
+
+  & .ant-form-item {
+    margin-bottom: 20px;
+  }
+}
+
+.exclamation {
+  color: red;
+
+  &-icon {
+    font-size: 20px;
+    vertical-align: bottom;
+  }
+}
+
+.tag-readonly {
+  margin-top: 8px;
+//  cursor: default;
+}
+
+.ant-tag-checkable {
+  border: 1px solid #e9e9e9;
+//  background: #f7f7f7;
+//  color: rgba(0, 0, 0, 0.65);
+}
+
+// Global table styles
+//.ant-table {
+//  border-radius: 4px;
+//  border: 1px solid #e9e9e9;
+//
+//  & table {
+//    border-collapse: collapse;
+//  }
+//}
+//
+//tr > td + td {
+//  border-left: 1px solid #e9e9e9;
+//}
+//
+//
+//tr > th + th {
+//  border-left: 1px solid #e9e9e9;
+//}
+//
+//tr > th {
+//  border-bottom: 1px solid #e9e9e9;
+//}
+.ant-table-middle .ant-table-tbody > tr > td {
+  padding: 6px 8px;
+}
+
+.ant-table-wrapper {
+  padding: 16px;
+}
+/////////////
+
+.contentWrapper > div {
+  padding-top: 16px;
+}
+
+.create-button {
+  margin-left: 16px;
+  display: block;
+}
+
+.form-admin-search-form {
+  margin-right: 16px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.ant-btn-group {
+  display: flex;
+}
+
+.ant-table-bordered .ant-table-body > table {
+  table-layout: fixed;
+}
+
+.form-preview {
+  border: 1px dashed rgba(.5, .5, .5, .3);
+  padding: 16px;
+  background-color: #f8f8f8;
+  border-radius: 4px;
+
+  &__header {
+    text-align: center;
+  }
+
+  & .react-tel-input {
+    width: 100%;
+  }
+//  & .form-group {
+//    margin-top: 10px;
+//  }
+}
+
+.formdata-content {
+  &__search-button {
+    width: 300px;
+  }
+
+  &__primary {
+    font-weight: bold;
+  }
+
+  &__secondary {
+    font-size: 75%;
+    color: #777;
+  }
+}
+
+.masked-input__hint {
+  display: block;
+  line-height: 12px;
+  text-align: left;
+}
+
+.form-group {
+  margin-bottom: 20px;
+
+  & > label {
+    line-height: 32px;
+  }
+}
+
+.form-disclaimer {
+  margin-top: 15px;
+}
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  .ant-table-bordered .ant-table-body > table {
+    table-layout: auto;
+  }
+}
+
+.unknown-entity {
+  color: #f04134;
+}
+
+.react-tel-input {
+  & .flag-dropdown {
+    display: none;
+  }
+  & input[type=text] {
+    padding-left: 6px !important;
+  }
+}
+
+.exportButtonContainer {
+  margin-top: 20px;
+  margin-right: 16px;
+}
