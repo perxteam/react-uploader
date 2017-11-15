@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Schema Form Builder/Viewer</title>
+</head>
+<body>
+	<div id="app"></div>
+	<script src="./bundle.js" type="text/javascript"></script>
+  <script>
+    function onSubmit(response) {
+      console.log('Custom submit raw response:', response)
+      response.json()
+        .then(json => console.log('Custom submit json:', json))
+    }
+    function onError(data) {
+      console.log('onError', data)
+    }
+
+    if (window && window.schemaFormViewer && window.schemaFormViewer.init) {
+//        formId: '5889f661b19ddb230a93a1af',
+//        formId: '5889fb7ffa5faa001eacb1be',
+      // Call schemaFormViewer with mount id, form's schema id  and (optional) object
+      // 'enumItems' with items for selectboxes
+      window.schemaFormViewer.init({
+        rootId: 'app',
+        formId: '58947134fa5faa00a639f830',
+        apiRoot: 'http://csp.dev.perx.ru',
+        onSubmit: onSubmit,
+        onError: onError,
+        enumItems: {
+          NEW_ITEMS: ['first', 'second', 'third'],
+        }
+      })
+    }
+  </script>
+</body>
+</html>
