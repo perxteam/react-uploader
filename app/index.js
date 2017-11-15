@@ -41,9 +41,6 @@ function init({
         }}
         totalFilesSizeLimit={1000}
         totalFilesCount={5}
-        fileSizeMin={0}
-        fileSizeMax={1000}
-        fileExtensions='go, log'
       />,
       rootElement
     )

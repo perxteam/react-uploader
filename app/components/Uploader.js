@@ -40,8 +40,8 @@ class Uploader extends Component {
         const { totalSize, errors } = this.state
         const size = totalSize - file.size
         this.setState({ totalSize: size, files })
-        const { totalFilesSizeLimit } = this.props
-        this.props.onChange(files)
+        const { totalFilesSizeLimit, onChange } = this.props
+        onChange(files)
         if (totalFilesSizeLimit && size <= totalFilesSizeLimit * 1024) {
           this.setState(R.dissocPath(['errors', 'totalFilesSizeLimit']))
         }
@@ -133,7 +133,6 @@ class Uploader extends Component {
       }
 
       totalSize = size
-      console.log('new total files size', totalSize)
       this.setState(R.evolve({ errors: R.empty }))
 
       const formData = new FormData
@@ -168,6 +167,8 @@ class Uploader extends Component {
       removeButtonLabel,
       showFilesList,
       showErrorsList,
+      componentContents,
+      hint,
     } = this.props
     const {
       files,
@@ -183,47 +184,65 @@ class Uploader extends Component {
           className="files-uploader__file-field"
           style={{ display: 'none' }}
         />
-        <div
-          className="files-uploader__add-file-button"
-          style={{
-            cursor: 'pointer',
-            backgroundColor: '#ff9c9c',
-            color: 'azure',
-            display: 'inline-block',
-            padding: 10,
-          }}
-          onClick={this.addFile}
-        >
-          {addButtonLabel}
-        </div>
         {
-          showFilesList && (
-            <div className="files-uploader__files-list">
-              {
-                files.map(file =>
-                  <div className="files-uploader-files-list__item" key={file.id}>
-                    <span className="files-uploader-files-list__item-name">{file.name}</span>
-                    <button
-                      className="files-uploader-files-list__item-remove"
-                      type="button"
-                      onClick={this.removeFile(file)}
-                    >{removeButtonLabel}</button>
-                  </div>
-                )
-              }
-            </div>
-          )
-        }
-        {
-          showErrorsList && errors && Object.keys(errors).length ? (
-            <div className="files-uploader__errors">
-              {
-                Object.keys(errors).map(key =>
-                  <div key={key} className="files-uploader__errors-error">{errors[key]}</div>
-                )
-              }
-            </div>
-          ) : null
+          componentContents.map(component => {
+            if (component === 'uploader') {
+              return (
+                <div
+                  className="files-uploader__add-file-button"
+                  style={{
+                    cursor: 'pointer',
+                    backgroundColor: '#ff9c9c',
+                    color: 'azure',
+                    display: 'inline-block',
+                    padding: 10,
+                  }}
+                  onClick={this.addFile}
+                >
+                  {addButtonLabel}
+                </div>
+              )
+            }
+            if (component === 'hint') {
+              return (
+                <div className="files-uploader__hint">{hint}</div>
+              )
+            }
+            if (component === 'filesList' && showFilesList) {
+              return (
+                <div className="files-uploader__files-list">
+                  {
+                    files.map(file =>
+                      <div className="files-uploader-files-list__item" key={file.id}>
+                        <span className="files-uploader-files-list__item-name">{file.name}</span>
+                        <button
+                          className="files-uploader-files-list__item-remove"
+                          type="button"
+                          onClick={this.removeFile(file)}
+                        >{removeButtonLabel}</button>
+                      </div>
+                    )
+                  }
+                </div>
+              )
+            }
+            if (component === 'errorsList' &&
+              showErrorsList &&
+              errors &&
+              Object.keys(errors).length
+            ) {
+              return (
+                <div className="files-uploader__errors">
+                  {
+                    Object.keys(errors).map(key =>
+                      <div key={key} className="files-uploader__errors-error">{errors[key]}</div>
+                    )
+                  }
+                </div>
+              )
+            }
+            return null
+          })
         }
       </div>
     )
@@ -242,6 +261,9 @@ Uploader.propTypes = {
   onChangeFilesSelection: PropTypes.func,
   showFilesList: PropTypes.bool,
   showErrorsList: PropTypes.bool,
+  componentContents: PropTypes.arrayOf(
+    PropTypes.oneOf(['hint', 'uploader', 'filesList', 'errorsList']),
+  ),
 	// Количество файлов которое пользователь может приложить
   totalFilesCount: PropTypes.number,
 	// Сообщение об ошибке при превышении totalFilesCount
@@ -262,6 +284,8 @@ Uploader.propTypes = {
 	fileExtensions: PropTypes.string,
 	// Сообщение об ошибке если указан файл с запрещенным расширением
 	fileExtensionsError: PropTypes.string,
+	// Пояснительный текст
+  hint: PropTypes.string,
 }
 
 Uploader.defaultProps = {
@@ -272,6 +296,9 @@ Uploader.defaultProps = {
   addButtonLabel: 'Добавить файлы',
   removeButtonLabel: 'Удалить',
   onChangeFilesSelection: noop,
+  componentContents: [
+    'hint', 'uploader', 'filesList', 'errorsList'
+  ],
   showFilesList: true,
   showErrorsList: true,
   totalFilesCount: 1,
@@ -284,6 +311,7 @@ Uploader.defaultProps = {
   totalFilesSizeLimitError: 'Суммарный размер файлов не может превышать {} МБ',
 	fileExtensions: undefined,
 	fileExtensionsError: 'Поддерживаемые форматы файлов: {}',
+  hint: 'Вы можете прикрепить не более 10 файлов с расширением jpg'
 }
 
 export default Uploader
