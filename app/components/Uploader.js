@@ -116,16 +116,16 @@ class Uploader extends Component {
 
       const extension = file.name.indexOf('.') !== -1
         ? R.compose(
-            R.toLower,
-            R.last,
-            R.split('.'),
-            R.prop('name')
-          )(file)
+          R.toLower,
+          R.last,
+          R.split('.'),
+          R.prop('name')
+        )(file)
         : undefined
 
       if (
         fileExtensions && (!extension ||
-        fileExtensions.replace(/ /g, '').split(',').indexOf(extension) === -1)
+          fileExtensions.replace(/ /g, '').split(',').indexOf(extension) === -1)
       ) {
         const error = fileExtensionsError.replace('{}', fileExtensions)
         this.setState(R.assocPath(['errors', 'fileExtensionsError'], error))
@@ -153,11 +153,11 @@ class Uploader extends Component {
   }
 
   resetFileInput = () => {
-      this.fileInput.value = ''
-      if(!/safari/i.test(navigator.userAgent)){
-          this.fileInput.type = ''
-          this.fileInput.type = 'file'
-      }
+    this.fileInput.value = ''
+    if(!/safari/i.test(navigator.userAgent)){
+      this.fileInput.type = ''
+      this.fileInput.type = 'file'
+    }
   }
 
   render() {
@@ -268,27 +268,27 @@ Uploader.propTypes = {
   componentContents: PropTypes.arrayOf(
     PropTypes.oneOf(['hint', 'uploader', 'filesList', 'errorsList']),
   ),
-	// Количество файлов которое пользователь может приложить
+  // Количество файлов которое пользователь может приложить
   totalFilesCount: PropTypes.number,
-	// Сообщение об ошибке при превышении totalFilesCount
+  // Сообщение об ошибке при превышении totalFilesCount
   totalFilesCountError: PropTypes.string,
   // Минимальный размер одного файла (в Кб)
   fileSizeMin: PropTypes.number,
-	// Сообщение об ошибке если размер файла меньше fileSizeMin
+  // Сообщение об ошибке если размер файла меньше fileSizeMin
   fileSizeMinError: PropTypes.string,
   // Максимальный размер одного файла (в Кб)
   fileSizeMax: PropTypes.number,
-	// Сообщение об ошибке если размер файла больше fileSizeMax
+  // Сообщение об ошибке если размер файла больше fileSizeMax
   fileSizeMaxError: PropTypes.string,
   // Максимальный общий размер приложенных файлов (В Кб)
   totalFilesSizeLimit: PropTypes.number,
-	// Сообщение об ошибке если суммарный размер файлов превышает totalFilesSizeLimit
+  // Сообщение об ошибке если суммарный размер файлов превышает totalFilesSizeLimit
   totalFilesSizeLimitError: PropTypes.string,
-	// Разрешенные расширения через запятую
-	fileExtensions: PropTypes.string,
-	// Сообщение об ошибке если указан файл с запрещенным расширением
-	fileExtensionsError: PropTypes.string,
-	// Пояснительный текст
+  // Разрешенные расширения через запятую
+  fileExtensions: PropTypes.string,
+  // Сообщение об ошибке если указан файл с запрещенным расширением
+  fileExtensionsError: PropTypes.string,
+  // Пояснительный текст
   hint: PropTypes.string,
 }
 
@@ -313,8 +313,8 @@ Uploader.defaultProps = {
   fileSizeMaxError:  'Размер файла не может превышать {} МБ',
   totalFilesSizeLimit: 20000,
   totalFilesSizeLimitError: 'Суммарный размер файлов не может превышать {} МБ',
-	fileExtensions: undefined,
-	fileExtensionsError: 'Поддерживаемые форматы файлов: {}',
+  fileExtensions: undefined,
+  fileExtensionsError: 'Поддерживаемые форматы файлов: {}',
   hint: undefined
 }
 
