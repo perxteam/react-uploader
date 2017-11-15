@@ -2,6 +2,10 @@
   "name": "react-uploader",
   "version": "0.0.1",
   "description": "Files upload widget for React",
+  "main": "./lib/index.js",
+  "files": [
+      "lib"
+  ],
   "scripts": {
     "build:builder": "webpack -p",
     "build:viewer": "cross-env APP_TYPE=viewer webpack -p",
@@ -22,6 +26,7 @@
     "babel-polyfill": "^6.23.0",
     "isomorphic-fetch": "^2.2.1",
     "promise-polyfill": "^6.0.2",
+    "prop-types": "^15.6.0",
     "ramda": "^0.23.0",
     "react": "15.3.0",
     "react-dom": "15.3.0",
