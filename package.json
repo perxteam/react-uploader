@@ -7,11 +7,8 @@
       "lib"
   ],
   "scripts": {
-    "build:builder": "webpack -p",
-    "build:viewer": "cross-env APP_TYPE=viewer webpack -p",
-    "dev:viewer": "cross-env APP_TYPE=viewer webpack-dev-server --progress",
+    "build": "webpack -p",
     "build:lib": "rimraf lib && cross-env NODE_ENV=production babel -d lib/ app/ && cp -R app/assets lib/ && git add .",
-    "build": "concurrently \"npm run build:builder\" \"npm run build:viewer\"",
     "start": "webpack-dev-server --progress --profile --colors"
   },
   "pre-commit": [

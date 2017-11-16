@@ -176,7 +176,6 @@ module.exports = {
     },
     modules: [
       sourcePath,
-      './assets',
       'node_modules'
     ]
   },
