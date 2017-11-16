@@ -90,7 +90,10 @@ if (isProd) {
 
 module.exports = {
   devtool: isProd ? 'source-map' : 'source-map',
-  entry: jsEntry,
+  entry: [
+    jsEntry,
+    './app/assets/sass/main.scss'
+  ],
   output: {
     filename: getFilename('[name].js'),
 		chunkFilename: getFilename('[name]-chunk.js'),
