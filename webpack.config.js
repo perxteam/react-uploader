@@ -14,9 +14,7 @@ const isProd = nodeEnv === 'production'
 const sourcePath = path.join(__dirname, './app');
 const jsEntry = path.join(sourcePath, '/index.js')
 
-const staticsPath = process.env.APP_TYPE === 'viewer'
-  ? path.join(__dirname, './public/viewer')
-  : path.join(__dirname, './public/builder')
+const staticsPath = path.join(__dirname, './public')
 
 function getFilename(filename) {
 //  return isProd ? filename.replace(/\.([^.]+)$/,".[chunkhash].$1") : filename
@@ -85,9 +83,6 @@ if (isProd) {
   )
 } else {
   plugins.push(
-//    new BundleAnalyzerPlugin({
-//      analyzerMode: 'static'
-//    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin()
   )
@@ -149,23 +144,6 @@ module.exports = {
           }
         ]
       },
-//      {
-//        test: /\.js$/,
-//        enforce: 'pre',
-//        use: [
-//          {
-//            loader: 'eslint-loader',
-//            query: {
-//              fix: true,
-//            }
-//          }
-//        ],
-//        exclude: /node_modules/,
-//      },
-      {
-        test: /\.(eot|svg|ttf|woff|woff2)$/,
-        loader: 'file-loader?name=fonts/[name].[ext]'
-      }
     ],
   },
   resolve: {
@@ -176,7 +154,6 @@ module.exports = {
     },
     modules: [
       sourcePath,
-      './assets',
       'node_modules'
     ]
   },

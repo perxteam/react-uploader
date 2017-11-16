@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import PropTypes from 'prop-types'
 import R from 'ramda'
 import fetch from 'isomorphic-fetch'
+import 'assets/sass/main'
 
 function noop() {}
 
@@ -182,7 +183,6 @@ class Uploader extends Component {
           multiple={isMultiple}
           onChange={this.handleUpload}
           className="files-uploader__file-field"
-          style={{ display: 'none' }}
         />
         {
           R.compose(
@@ -192,13 +192,6 @@ class Uploader extends Component {
                   <div
                     key={component}
                     className="files-uploader__add-file-button"
-                    style={{
-                      cursor: 'pointer',
-                      backgroundColor: '#ff9c9c',
-                      color: 'azure',
-                      display: 'inline-block',
-                      padding: 10,
-                    }}
                     onClick={this.addFile}
                   >
                     {addButtonLabel}
