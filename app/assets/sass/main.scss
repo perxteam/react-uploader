@@ -2,7 +2,7 @@
     font-family: Arial;
     font-size: 14px;
 
-    &__file-field {
+    &__file-field[type="file"] {
         display: none;
     }
 

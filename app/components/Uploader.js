@@ -2,7 +2,6 @@ import React, { Component } from "react"
 import PropTypes from 'prop-types'
 import R from 'ramda'
 import fetch from 'isomorphic-fetch'
-import 'assets/sass/main'
 
 function noop() {}
 
