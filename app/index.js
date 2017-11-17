@@ -26,15 +26,14 @@ function init({
 }) {
   const rootElement = document.getElementById(rootId)
 
-  console.log('rootElement', rootElement)
   if (rootElement) {
     render(
       <Uploader
         onChange={handleChange}
         apiUrl="http://127.0.0.1:8001/attachments-upload/"
         headers={{
-          'X-CSRFToken': 'gRNeMHWm7q5dnKkMnheghjA7u2kenRbXdO9yYG2vOYv6ZfmkyydO2yXlLwIayB9s',
-          'Cookie': 'csrftoken=gRNeMHWm7q5dnKkMnheghjA7u2kenRbXdO9yYG2vOYv6ZfmkyydO2yXlLwIayB9s',
+          'X-CSRFToken': 't5V6QZAWFR2ADPNwxdDQmtLTbXZlm28twep6k6omlFO8J3FtDOP46BqntARqwIET',
+          'Cookie': 'csrftoken=t5V6QZAWFR2ADPNwxdDQmtLTbXZlm28twep6k6omlFO8J3FtDOP46BqntARqwIET',
         }}
         fetchConfig={{
           credentials: 'include',

@@ -186,19 +186,22 @@ class Uploader extends Component {
           multiple={isMultiple}
           onChange={this.handleUpload}
           className="files-uploader__file-field"
+          style={{
+            display: 'none',
+          }}
         />
         {
           R.compose(
             R.map(component => {
               if (component === 'uploader') {
                 return (
-                  <div
+                  <button
                     key={component}
                     className="files-uploader__add-file-button"
                     onClick={this.addFile}
                   >
                     {addButtonLabel}
-                  </div>
+                  </button>
                 )
               }
               if (component === 'hint' && hint) {
