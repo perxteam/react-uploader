@@ -12,7 +12,8 @@ class Uploader extends Component {
     errors: {},
   }
 
-  addFile = () => {
+  addFile = (event) => {
+    event.preventDefault()
     this.fileInput.click()
   }
 
