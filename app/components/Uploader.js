@@ -35,32 +35,44 @@ class Uploader extends Component {
       .catch(this.onError)
   }
 
-  onRemovedSubmit = file => response => response.json()
-    .then(data => {
-      if (data.result === 'success') {
-        const files = R.reject(R.propEq('id', file.id), this.state.files)
-        const { totalSize, errors } = this.state
-        const size = totalSize - file.size
-        this.setState({ totalSize: size, files })
-        const { totalFilesSizeLimit, onChange } = this.props
-        onChange(files)
-        if (totalFilesSizeLimit && size <= totalFilesSizeLimit * 1024) {
-          this.setState(R.dissocPath(['errors', 'totalFilesSizeLimit']))
-        }
+  onRemovedSubmit = file => response => {
+    if (response.ok) {
+      response.json()
+        .then(data => {
+          if (data.result === 'success') {
+            const files = R.reject(R.propEq('id', file.id), this.state.files)
+            const { totalSize, errors } = this.state
+            const size = totalSize - file.size
+            this.setState({ totalSize: size, files })
+            const { totalFilesSizeLimit, onChange } = this.props
+            onChange(files)
+            if (totalFilesSizeLimit && size <= totalFilesSizeLimit * 1024) {
+              this.setState(R.dissocPath(['errors', 'totalFilesSizeLimit']))
+            }
 
-        if (files.length < this.props.totalFilesCount) {
-          this.setState(R.dissocPath(['errors', 'totalFilesCount']))
-        }
-      }
-    })
+            if (files.length < this.props.totalFilesCount) {
+              this.setState(R.dissocPath(['errors', 'totalFilesCount']))
+            }
+          }
+        })
+    } else {
+      const { status, statusText } = response
+      this.setState(R.assocPath(['errors', 'networkError'], `Error: ${statusText} (${status})`))
+    }
+  }
 
   onAddSubmit = response => {
-    response.json()
-      .then(data => {
-        this.setState(R.over(R.lensProp('files'), R.append(data)), () => {
-          this.props.onChange(this.state.files)
+    if (response.ok) {
+      response.json()
+        .then(data => {
+          this.setState(R.over(R.lensProp('files'), R.append(data)), () => {
+            this.props.onChange(this.state.files)
+          })
         })
-      })
+    } else {
+      const { status, statusText } = response
+      this.setState(R.assocPath(['errors', 'networkError'], `Error: ${statusText} (${status})`))
+    }
   }
 
   onError = response => {
