@@ -24,6 +24,8 @@ class Uploader extends Component {
       fetchConfig,
     } = this.props
 
+    if (!apiUrl) return
+
     fetch(`${apiUrl}${file.id}/`, {
       method: 'DELETE',
       headers,
@@ -84,6 +86,8 @@ class Uploader extends Component {
       fileExtensions,
       fileExtensionsError,
     } = this.props
+
+    if (!apiUrl) return
 
     onChangeFilesSelection(newfiles)
     let { files, totalSize, errors } = this.state
@@ -246,8 +250,8 @@ class Uploader extends Component {
 }
 
 Uploader.propTypes = {
-  onChange: PropTypes.func.isRequired,
-  apiUrl: PropTypes.string.isRequired,
+  onChange: PropTypes.func,
+  apiUrl: PropTypes.string,
   isMultiple: PropTypes.bool,
   method: PropTypes.string,
   headers: PropTypes.object,
@@ -285,6 +289,8 @@ Uploader.propTypes = {
 }
 
 Uploader.defaultProps = {
+  onChange: noop,
+  apiUrl: undefined,
   isMultiple: true,
   method: 'POST',
   headers: {},
