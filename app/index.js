@@ -29,17 +29,11 @@ function init({
   if (rootElement) {
     render(
       <Uploader
+        apiUrl="http://127.0.0.1:8080/forms/api/v1/uploads"
         onChange={handleChange}
-        apiUrl="http://127.0.0.1:8001/attachments-upload/"
-        headers={{
-          'X-CSRFToken': 't5V6QZAWFR2ADPNwxdDQmtLTbXZlm28twep6k6omlFO8J3FtDOP46BqntARqwIET',
-          'Cookie': 'csrftoken=t5V6QZAWFR2ADPNwxdDQmtLTbXZlm28twep6k6omlFO8J3FtDOP46BqntARqwIET',
-        }}
-        fetchConfig={{
-          credentials: 'include',
-        }}
         totalFilesSizeLimit={1000}
         totalFilesCount={5}
+        actualDelete={false}
       />,
       rootElement
     )

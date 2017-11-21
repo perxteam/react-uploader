@@ -23,11 +23,21 @@ class Uploader extends Component {
       method,
       headers,
       fetchConfig,
+      trailingSlash,
+      actualDelete,
     } = this.props
 
-    if (!apiUrl) return
+    if (!apiUrl) return undefined
+    if (!actualDelete) {
+      this.handleRemove(file)
+      return undefined
+    }
 
-    fetch(`${apiUrl}${file.id}/`, {
+    let url = apiUrl.slice(-1) === '/'
+      ? `${apiUrl}${file.id}`
+      : `${apiUrl}/${file.id}`
+    url = trailingSlash ? `${url}/` : url
+    fetch(url, {
       method: 'DELETE',
       headers,
       ...fetchConfig,
@@ -36,29 +46,34 @@ class Uploader extends Component {
       .catch(this.onError)
   }
 
+
   onRemovedSubmit = file => response => {
     if (response.ok) {
       response.json()
         .then(data => {
           if (data.result === 'success') {
-            const files = R.reject(R.propEq('id', file.id), this.state.files)
-            const { totalSize, errors } = this.state
-            const size = totalSize - file.size
-            this.setState({ totalSize: size, files })
-            const { totalFilesSizeLimit, onChange } = this.props
-            onChange(files)
-            if (totalFilesSizeLimit && size <= totalFilesSizeLimit * 1024) {
-              this.setState(R.dissocPath(['errors', 'totalFilesSizeLimit']))
-            }
-
-            if (files.length < this.props.totalFilesCount) {
-              this.setState(R.dissocPath(['errors', 'totalFilesCount']))
-            }
+            this.handleRemove(file)
           }
         })
     } else {
       const { status, statusText } = response
       this.setState(R.assocPath(['errors', 'networkError'], `Error: ${statusText} (${status})`))
+    }
+  }
+
+  handleRemove = file => {
+    const files = R.reject(R.propEq('id', file.id), this.state.files)
+    const { totalSize, errors } = this.state
+    const size = totalSize - file.size
+    this.setState({ totalSize: size, files })
+    const { totalFilesSizeLimit, onChange } = this.props
+    onChange(files)
+    if (totalFilesSizeLimit && size <= totalFilesSizeLimit * 1024) {
+      this.setState(R.dissocPath(['errors', 'totalFilesSizeLimit']))
+    }
+
+    if (files.length < this.props.totalFilesCount) {
+      this.setState(R.dissocPath(['errors', 'totalFilesCount']))
     }
   }
 
@@ -98,6 +113,7 @@ class Uploader extends Component {
       totalFilesSizeLimitError,
       fileExtensions,
       fileExtensionsError,
+      trailingSlash,
     } = this.props
 
     if (!apiUrl) return
@@ -155,7 +171,7 @@ class Uploader extends Component {
       const formData = new FormData
       formData.append('file', file)
 
-      return fetch(apiUrl, {
+      return fetch(trailingSlash ? `${apiUrl}/` : apiUrl, {
         method,
         headers,
         body: formData,
@@ -186,6 +202,7 @@ class Uploader extends Component {
       showErrorsList,
       componentContents,
       hint,
+      filenameField,
     } = this.props
     const {
       files,
@@ -228,7 +245,7 @@ class Uploader extends Component {
                     {
                       files.map(file =>
                         <div key={file.id} className="files-uploader-files-list__item" key={file.id}>
-                          <span className="files-uploader-files-list__item-name">{file.name}</span>
+                          <span className="files-uploader-files-list__item-name">{file[filenameField]}</span>
                           <button
                             className="files-uploader-files-list__item-remove"
                             type="button"
@@ -280,6 +297,13 @@ Uploader.propTypes = {
   componentContents: PropTypes.arrayOf(
     PropTypes.oneOf(['hint', 'uploader', 'filesList', 'errorsList']),
   ),
+  showErrorsList: PropTypes.bool,
+  trailingSlash: PropTypes.bool,
+  // Вызывать ли API удаления файлов
+  actualDelete: PropTypes.bool,
+  // Наименование поля, значение которого будет использовано для
+  // получения имени файла, отображаемого в списке файлов.
+  filenameField: PropTypes.string,
   // Количество файлов которое пользователь может приложить
   totalFilesCount: PropTypes.number,
   // Сообщение об ошибке при превышении totalFilesCount
@@ -318,6 +342,9 @@ Uploader.defaultProps = {
     'hint', 'uploader', 'filesList', 'errorsList'
   ],
   showFilesList: true,
+  trailingSlash: false,
+  actualDelete: true,
+  filenameField: 'filename',
   showErrorsList: true,
   totalFilesCount: 1,
   totalFilesCountError: 'Вы не можете загрузить более {} файлов',
