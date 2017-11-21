@@ -203,19 +203,24 @@ class Uploader extends Component {
       componentContents,
       hint,
       filenameField,
+      cssPrefix,
     } = this.props
     const {
       files,
       errors,
     } = this.state
+    const className = cssPrefix
+      ? `${cssPrefix}__files-uploader`
+      : 'files-uploader'
+
     return (
-      <div className='files-uploader'>
+      <div className={className}>
         <input
           ref={(el) => { this.fileInput = el }}
           type="file"
           multiple={isMultiple}
           onChange={this.handleUpload}
-          className="files-uploader__file-field"
+          className={`${className}__file-field`}
           style={{
             display: 'none',
           }}
@@ -227,7 +232,7 @@ class Uploader extends Component {
                 return (
                   <button
                     key={component}
-                    className="files-uploader__add-file-button"
+                    className={`${className}__add-file-button`}
                     onClick={this.addFile}
                   >
                     {addButtonLabel}
@@ -236,18 +241,22 @@ class Uploader extends Component {
               }
               if (component === 'hint' && hint) {
                 return (
-                  <div className="files-uploader__hint" key={component}>{hint}</div>
+                  <div className={`${className}__files-uploader__hint`} key={component}>{hint}</div>
                 )
               }
               if (component === 'filesList' && showFilesList) {
                 return (
-                  <div className="files-uploader__files-list" key={component}>
+                  <div className={`${className}__files-list`} key={component}>
                     {
                       files.map(file =>
-                        <div key={file.id} className="files-uploader-files-list__item" key={file.id}>
-                          <span className="files-uploader-files-list__item-name">{file[filenameField]}</span>
+                        <div key={file.id} className={`${className}-files-list__item`} key={file.id}>
+                          <span
+                            className={`${className}-files-list__item-name`}
+                          >
+                            {file[filenameField]}
+                          </span>
                           <button
-                            className="files-uploader-files-list__item-remove"
+                            className={`${className}-files-list__item-remove`}
                             type="button"
                             onClick={this.removeFile(file)}
                           >{removeButtonLabel}</button>
@@ -263,10 +272,10 @@ class Uploader extends Component {
                 Object.keys(errors).length
               ) {
                 return (
-                  <div className="files-uploader__errors" key={component}>
+                  <div className={`${className}__errors`} key={component}>
                     {
                       Object.keys(errors).map(key =>
-                        <div key={key} className="files-uploader__errors-error">{errors[key]}</div>
+                        <div key={key} className={`${className}__errors-error`}>{errors[key]}</div>
                       )
                     }
                   </div>
@@ -299,6 +308,7 @@ Uploader.propTypes = {
   ),
   showErrorsList: PropTypes.bool,
   trailingSlash: PropTypes.bool,
+  cssPrefix: PropTypes.string,
   // Вызывать ли API удаления файлов
   actualDelete: PropTypes.bool,
   // Наименование поля, значение которого будет использовано для
@@ -345,6 +355,7 @@ Uploader.defaultProps = {
   trailingSlash: false,
   actualDelete: true,
   filenameField: 'filename',
+  cssPrefix: undefined,
   showErrorsList: true,
   totalFilesCount: 1,
   totalFilesCountError: 'Вы не можете загрузить более {} файлов',
