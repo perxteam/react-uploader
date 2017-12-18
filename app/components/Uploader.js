@@ -15,8 +15,8 @@ class Uploader extends Component {
   state = initialState
 
   componentWillReceiveProps(nextProps) {
-    const { externalState } = nextProps
-    if (!externalState.length && externalState !== this.props.externalState) {
+    const { value } = nextProps
+    if (!value.length && value !== this.props.value) {
       this.setState(initialState)
     }
   }
@@ -315,7 +315,7 @@ Uploader.propTypes = {
   componentContents: PropTypes.arrayOf(
     PropTypes.oneOf(['hint', 'uploader', 'filesList', 'errorsList']),
   ),
-  externalState: PropTypes.array,
+  value: PropTypes.array,
   showErrorsList: PropTypes.bool,
   trailingSlash: PropTypes.bool,
   cssPrefix: PropTypes.string,
@@ -361,7 +361,7 @@ Uploader.defaultProps = {
   componentContents: [
     'hint', 'uploader', 'filesList', 'errorsList'
   ],
-  externalState: [],
+  value: [],
   showFilesList: true,
   trailingSlash: false,
   actualDelete: true,

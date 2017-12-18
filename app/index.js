@@ -40,7 +40,7 @@ class UploaderContainer extends React.Component {
           totalFilesSizeLimit={1000}
           totalFilesCount={5}
           actualDelete={false}
-          externalState={this.state.files}
+          value={this.state.files}
         />
         <button onClick={this.reset}>Reset</button>
       </div>
