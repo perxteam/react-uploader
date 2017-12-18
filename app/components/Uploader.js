@@ -5,11 +5,20 @@ import fetch from 'isomorphic-fetch'
 
 function noop() {}
 
+const initialState = {
+  files: [],
+  totalSize: 0,
+  errors: {},
+}
+
 class Uploader extends Component {
-  state = {
-    files: [],
-    totalSize: 0,
-    errors: {},
+  state = initialState
+
+  componentWillReceiveProps(nextProps) {
+    const { externalState } = nextProps
+    if (!externalState.length && externalState !== this.props.externalState) {
+      this.setState(initialState)
+    }
   }
 
   addFile = (event) => {
@@ -306,6 +315,7 @@ Uploader.propTypes = {
   componentContents: PropTypes.arrayOf(
     PropTypes.oneOf(['hint', 'uploader', 'filesList', 'errorsList']),
   ),
+  externalState: PropTypes.array,
   showErrorsList: PropTypes.bool,
   trailingSlash: PropTypes.bool,
   cssPrefix: PropTypes.string,
@@ -351,6 +361,7 @@ Uploader.defaultProps = {
   componentContents: [
     'hint', 'uploader', 'filesList', 'errorsList'
   ],
+  externalState: [],
   showFilesList: true,
   trailingSlash: false,
   actualDelete: true,
@@ -367,7 +378,7 @@ Uploader.defaultProps = {
   totalFilesSizeLimitError: 'Суммарный размер файлов не может превышать {} МБ',
   fileExtensions: undefined,
   fileExtensionsError: 'Поддерживаемые форматы файлов: {}',
-  hint: undefined
+  hint: undefined,
 }
 
 export default Uploader
