@@ -17,8 +17,35 @@ if (!global._babelPolyfill) {
   require('babel-polyfill')
 }
 
-function handleChange(value) {
-  console.log('files changed:', value)
+class UploaderContainer extends React.Component {
+  state = {
+    files: [],
+  }
+
+  handleChange = (value) => {
+    console.log('files changed:', value)
+    this.setState({ files: value })
+  }
+
+  reset = () => {
+    this.setState({ files: [] })
+  }
+
+  render() {
+    return (
+      <div>
+        <Uploader
+          apiUrl="http://127.0.0.1:8080/forms/api/v1/uploads"
+          onChange={this.handleChange}
+          totalFilesSizeLimit={1000}
+          totalFilesCount={5}
+          actualDelete={false}
+          value={this.state.files}
+        />
+        <button onClick={this.reset}>Reset</button>
+      </div>
+    )
+  }
 }
 
 function init({
@@ -27,16 +54,7 @@ function init({
   const rootElement = document.getElementById(rootId)
 
   if (rootElement) {
-    render(
-      <Uploader
-        apiUrl="http://127.0.0.1:8080/forms/api/v1/uploads"
-        onChange={handleChange}
-        totalFilesSizeLimit={1000}
-        totalFilesCount={5}
-        actualDelete={false}
-      />,
-      rootElement
-    )
+    render(<UploaderContainer />, rootElement)
   }
 }
 
