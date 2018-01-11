@@ -41,6 +41,9 @@ class UploaderContainer extends React.Component {
           totalFilesCount={5}
           actualDelete={false}
           value={this.state.files}
+          miscFormData={{
+            'form_id': '21321314fdsfdfsdnf',
+          }}
         />
         <button onClick={this.reset}>Reset</button>
       </div>
