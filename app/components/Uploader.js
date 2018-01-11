@@ -178,6 +178,12 @@ class Uploader extends Component {
       this.setState(R.evolve({ errors: R.empty }))
 
       const formData = new FormData
+      const { miscFormData } = this.props
+      if (miscFormData) {
+        for (const key in miscFormData) {
+          formData.append(key, miscFormData[key])
+        }
+      }
       formData.append('file', file)
 
       return fetch(trailingSlash ? `${apiUrl}/` : apiUrl, {
@@ -346,6 +352,7 @@ Uploader.propTypes = {
   fileExtensionsError: PropTypes.string,
   // Пояснительный текст
   hint: PropTypes.string,
+  miscFormData: PropTypes.object,
 }
 
 Uploader.defaultProps = {
@@ -379,6 +386,7 @@ Uploader.defaultProps = {
   fileExtensions: undefined,
   fileExtensionsError: 'Поддерживаемые форматы файлов: {}',
   hint: undefined,
+  miscFormData: undefined,
 }
 
 export default Uploader
