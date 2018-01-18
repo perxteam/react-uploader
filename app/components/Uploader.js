@@ -11,6 +11,25 @@ const initialState = {
   errors: {},
 }
 
+//export const i18nHOC = (Component) => {
+//  class WrappedComponent extends React.Component {
+//    processError = (template, argument) => {
+////      console.log('template', template, 'argumnt', argument)
+//      console.log('processError in WrappedComponent')
+//      return 'AAAAAAAaa'
+//    }
+//
+//    render() {
+//      console.log('aaa render')
+//      return <Component
+//        {...this.props}
+//        />
+//    }
+//  }
+//
+//  return WrappedComponent
+//}
+
 class Uploader extends Component {
   state = initialState
 
@@ -104,6 +123,10 @@ class Uploader extends Component {
     console.warn('error response', response)
   }
 
+  processError = ({ template, args: { argument } }) => {
+    return template.replace('{}', argument)
+  }
+
   handleUpload = event => {
     const newfiles = event.target.files
     const {
@@ -113,16 +136,22 @@ class Uploader extends Component {
       headers,
       fetchConfig,
       totalFilesCount,
-      totalFilesCountError,
       fileSizeMin,
-      fileSizeMinError,
       fileSizeMax,
-      fileSizeMaxError,
       totalFilesSizeLimit,
-      totalFilesSizeLimitError,
       fileExtensions,
-      fileExtensionsError,
       trailingSlash,
+      errorProcessor,
+      fileSizeMaxError,
+      fileSizeMaxErrorKey,
+      fileSizeMinError,
+      fileSizeMinErrorKey,
+      totalFilesCountError,
+      totalFilesCountErrorKey,
+      totalFilesSizeLimitError,
+      totalFilesSizeLimitErrorKey,
+      fileExtensionsError,
+      fileExtensionsErrorKey,
     } = this.props
 
     if (!apiUrl) return
@@ -130,28 +159,48 @@ class Uploader extends Component {
     onChangeFilesSelection(newfiles)
     let { files, totalSize, errors } = this.state
 
+    const processError = errorProcessor || this.processError
     Array.prototype.every.call(newfiles, (file, index) => {
       if (files.length + index + 1 > totalFilesCount) {
-        const error = totalFilesCountError.replace('{}', totalFilesCount)
+        const error = processError({
+          key: totalFilesCountErrorKey,
+          template: totalFilesCountError,
+          args: { argument: totalFilesCount }
+        })
         this.setState(R.assocPath(['errors', 'totalFilesCount'], error))
         return false
       }
 
       const size = totalSize + file.size
       if (totalFilesSizeLimit && size > totalFilesSizeLimit * 1024) {
-        const error = totalFilesSizeLimitError.replace('{}', totalFilesSizeLimit / 1000)
+//        const error = processError(totalFilesSizeLimitError, totalFilesSizeLimit / 1000)
+        const error = processError({
+          key: totalFilesSizeLimitErrorKey,
+          template: totalFilesSizeLimitError,
+          args: { argument: totalFilesSizeLimit / 1000 }
+        })
         this.setState(R.assocPath(['errors', 'totalFilesSizeLimit'], error))
         return false
       }
 
       if (file.size < fileSizeMin * 1024) {
-        const error = fileSizeMinError.replace('{}', fileSizeMin / 1000)
+//        const error = processError(fileSizeMinError, fileSizeMin / 1000)
+        const error = processError({
+          key: fileSizeMinErrorKey,
+          template: fileSizeMinError,
+          args: { argument: fileSizeMin / 1000 }
+        })
         this.setState(R.assocPath(['errors', 'fileSizeMin'], error))
         return false
       }
 
       if (file.size >= fileSizeMax * 1024) {
-        const error = fileSizeMaxError.replace('{}', fileSizeMax / 1000)
+//        const error = processError(fileSizeMaxError, fileSizeMax / 1000)
+        const error = processError({
+          key: fileSizeMaxErrorKey,
+          template: fileSizeMaxError,
+          args: { argument: fileSizeMax / 1000 }
+        })
         this.setState(R.assocPath(['errors', 'fileSizeMax'], error))
         return false
       }
@@ -169,7 +218,12 @@ class Uploader extends Component {
         fileExtensions && (!extension ||
           fileExtensions.replace(/ /g, '').split(',').indexOf(extension) === -1)
       ) {
-        const error = fileExtensionsError.replace('{}', fileExtensions)
+//        const error = processError(fileExtensionsError, fileExtensions)
+        const error = processError({
+          key: fileExtensionsErrorKey,
+          template: fileExtensionsError,
+          args: { argument: fileExtensions }
+        })
         this.setState(R.assocPath(['errors', 'fileExtensionsError'], error))
         return false
       }
@@ -334,25 +388,36 @@ Uploader.propTypes = {
   totalFilesCount: PropTypes.number,
   // Сообщение об ошибке при превышении totalFilesCount
   totalFilesCountError: PropTypes.string,
+  // Сокращенное обозначение (код) ошибки totalFilesCountError
+  totalFilesCountErrorKey: PropTypes.string,
   // Минимальный размер одного файла (в Кб)
   fileSizeMin: PropTypes.number,
   // Сообщение об ошибке если размер файла меньше fileSizeMin
   fileSizeMinError: PropTypes.string,
+  // Сокращенное обозначение (код) ошибки fileSizeMinError
+  fileSizeMinErrorKey: PropTypes.string,
   // Максимальный размер одного файла (в Кб)
   fileSizeMax: PropTypes.number,
   // Сообщение об ошибке если размер файла больше fileSizeMax
   fileSizeMaxError: PropTypes.string,
+  // Сокращенное обозначение (код) ошибки fileSizeMaxError
+  fileSizeMaxErrorKey: PropTypes.string,
   // Максимальный общий размер приложенных файлов (В Кб)
   totalFilesSizeLimit: PropTypes.number,
   // Сообщение об ошибке если суммарный размер файлов превышает totalFilesSizeLimit
   totalFilesSizeLimitError: PropTypes.string,
+  // Сокращенное обозначение (код) ошибки totalFilesSizeLimitError
+  totalFilesSizeLimitErrorKey: PropTypes.string,
   // Разрешенные расширения через запятую
   fileExtensions: PropTypes.string,
   // Сообщение об ошибке если указан файл с запрещенным расширением
   fileExtensionsError: PropTypes.string,
+  // Сокращенное обозначение (код) ошибки fileExtensionsError
+  fileExtensionsErrorKey: PropTypes.string,
   // Пояснительный текст
   hint: PropTypes.string,
   miscFormData: PropTypes.object,
+  errorProcessor: PropTypes.func,
 }
 
 Uploader.defaultProps = {
@@ -377,16 +442,22 @@ Uploader.defaultProps = {
   showErrorsList: true,
   totalFilesCount: 1,
   totalFilesCountError: 'Вы не можете загрузить более {} файлов',
+  totalFilesCountErrorKey: 'filesUploaderTotalFilesCount',
   fileSizeMin: 0,
   fileSizeMinError:  'Размер файла не может быть меньше {} МБ',
+  fileSizeMinErrorKey:  'filesUploaderFileSizeMin',
   fileSizeMax: 10000,
   fileSizeMaxError:  'Размер файла не может превышать {} МБ',
+  fileSizeMaxErrorKey:  'filesUploaderFileSizeMax',
   totalFilesSizeLimit: 20000,
   totalFilesSizeLimitError: 'Суммарный размер файлов не может превышать {} МБ',
+  totalFilesSizeLimitErrorKey: 'filesUploaderTotalFilesSizeLimit',
   fileExtensions: undefined,
   fileExtensionsError: 'Поддерживаемые форматы файлов: {}',
+  fileExtensionsErrorKey: 'filesUploaderFileExtensions',
   hint: undefined,
   miscFormData: undefined,
+  errorProcessor: undefined,
 }
 
 export default Uploader
