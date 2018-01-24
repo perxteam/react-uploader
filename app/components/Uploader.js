@@ -11,25 +11,6 @@ const initialState = {
   errors: {},
 }
 
-//export const i18nHOC = (Component) => {
-//  class WrappedComponent extends React.Component {
-//    processError = (template, argument) => {
-////      console.log('template', template, 'argumnt', argument)
-//      console.log('processError in WrappedComponent')
-//      return 'AAAAAAAaa'
-//    }
-//
-//    render() {
-//      console.log('aaa render')
-//      return <Component
-//        {...this.props}
-//        />
-//    }
-//  }
-//
-//  return WrappedComponent
-//}
-
 class Uploader extends Component {
   state = initialState
 
@@ -160,49 +141,42 @@ class Uploader extends Component {
     let { files, totalSize, errors } = this.state
 
     const processError = errorProcessor || this.processError
-    Array.prototype.every.call(newfiles, (file, index) => {
+    const uploadResult = Array.prototype.map.call(newfiles, (file, index) => {
       if (files.length + index + 1 > totalFilesCount) {
         const error = processError({
           key: totalFilesCountErrorKey,
           template: totalFilesCountError,
           args: { argument: totalFilesCount }
         })
-        this.setState(R.assocPath(['errors', 'totalFilesCount'], error))
-        return false
+        return { totalFilesCount: error }
       }
 
       const size = totalSize + file.size
       if (totalFilesSizeLimit && size > totalFilesSizeLimit * 1024) {
-//        const error = processError(totalFilesSizeLimitError, totalFilesSizeLimit / 1000)
         const error = processError({
           key: totalFilesSizeLimitErrorKey,
           template: totalFilesSizeLimitError,
           args: { argument: totalFilesSizeLimit / 1000 }
         })
-        this.setState(R.assocPath(['errors', 'totalFilesSizeLimit'], error))
-        return false
+        return { totalFilesSizeLimit: error }
       }
 
       if (file.size < fileSizeMin * 1024) {
-//        const error = processError(fileSizeMinError, fileSizeMin / 1000)
         const error = processError({
           key: fileSizeMinErrorKey,
           template: fileSizeMinError,
           args: { argument: fileSizeMin / 1000 }
         })
-        this.setState(R.assocPath(['errors', 'fileSizeMin'], error))
-        return false
+        return { fileSizeMin: error }
       }
 
       if (file.size >= fileSizeMax * 1024) {
-//        const error = processError(fileSizeMaxError, fileSizeMax / 1000)
         const error = processError({
           key: fileSizeMaxErrorKey,
           template: fileSizeMaxError,
           args: { argument: fileSizeMax / 1000 }
         })
-        this.setState(R.assocPath(['errors', 'fileSizeMax'], error))
-        return false
+        return { fileSizeMax: error }
       }
 
       const extension = file.name.indexOf('.') !== -1
@@ -218,14 +192,12 @@ class Uploader extends Component {
         fileExtensions && (!extension ||
           fileExtensions.replace(/ /g, '').split(',').indexOf(extension) === -1)
       ) {
-//        const error = processError(fileExtensionsError, fileExtensions)
         const error = processError({
           key: fileExtensionsErrorKey,
           template: fileExtensionsError,
           args: { argument: fileExtensions }
         })
-        this.setState(R.assocPath(['errors', 'fileExtensionsError'], error))
-        return false
+        return { fileExtensionsError: error }
       }
 
       totalSize = size
@@ -250,7 +222,16 @@ class Uploader extends Component {
         .catch(this.onError)
     })
 
-    this.setState(R.assoc('totalSize', totalSize))
+    const uploadErrors = R.compose(
+      R.reduce((result, current) => R.merge(result, current), {}),
+      // Leave only errors objects, reject successful uploads
+      R.reject(item => item instanceof Promise),
+    )(uploadResult)
+
+    this.setState(R.merge(R.__, {
+      errors: uploadErrors,
+      totalSize,
+    }))
     this.resetFileInput()
   }
 
