@@ -37,8 +37,11 @@ class UploaderContainer extends React.Component {
         <Uploader
           apiUrl="http://127.0.0.1:8080/forms/api/v1/uploads"
           onChange={this.handleChange}
-          totalFilesSizeLimit={1000}
+          totalFilesSizeLimit={20000}
+          fileSizeMax={20000}
+          fileSizeMin={1000}
           totalFilesCount={5}
+          fileExtensions='pdf,jpg,png,bmp,gif,tif'
           actualDelete={false}
           value={this.state.files}
           miscFormData={{
