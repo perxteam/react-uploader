@@ -1,0 +1,17 @@
+.files-uploader {
+  font-family: Arial;
+  font-size: 14px; }
+  .files-uploader__file-field[type="file"] {
+    display: none; }
+  .files-uploader__add-file-button {
+    cursor: pointer;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    border-radius: 4px;
+    border: none;
+    color: azure;
+    display: inline-block;
+    padding: 10px;
+    margin-bottom: 15px; }
+  .files-uploader-files-list__item-name {
+    margin-right: 10px; }

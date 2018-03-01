@@ -2,6 +2,7 @@ import Promise from 'promise-polyfill'
 import React from 'react'
 import { render } from 'react-dom'
 import Uploader from 'components/Uploader'
+import 'css/main.css'
 
 // To add to window
 if (!window.Promise) {
@@ -35,7 +36,7 @@ class UploaderContainer extends React.Component {
     return (
       <div>
         <Uploader
-          apiUrl="http://127.0.0.1:8080/forms/api/v1/uploads"
+          apiUrl="http://0.0.0.0:8001/attachments-upload/"
           onChange={this.handleChange}
           totalFilesSizeLimit={1000}
           totalFilesCount={5}
@@ -43,6 +44,12 @@ class UploaderContainer extends React.Component {
           value={this.state.files}
           miscFormData={{
             'form_id': '21321314fdsfdfsdnf',
+          }}
+          headers={{
+            'X-CSRFToken': 'RoWgcGvo6mNHV4IovwqxU8V7gNy2RDSdYf6TmA5w5UyWbLFOPrtyogYJdvMK0hfK',
+          }}
+          fetchConfig={{
+            credentials: 'include'
           }}
         />
         <button onClick={this.reset}>Reset</button>

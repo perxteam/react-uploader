@@ -437,7 +437,7 @@ Uploader.defaultProps = {
   showFilesList: true,
   trailingSlash: false,
   actualDelete: true,
-  filenameField: 'filename',
+  filenameField: 'name',
   cssPrefix: undefined,
   showErrorsList: true,
   totalFilesCount: 1,

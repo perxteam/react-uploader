@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "build": "webpack -p",
-    "build:lib": "rimraf lib && cross-env NODE_ENV=production babel -d lib/ app/ && node-sass -o lib/css/ app/assets/sass/ && git add .",
+    "build:lib": "rimraf lib && cross-env NODE_ENV=production babel -d lib/ app/ && cp -Rv assets/css lib/ && git add .",
     "start": "webpack-dev-server --progress --profile --colors"
   },
   "pre-commit": [

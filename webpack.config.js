@@ -12,6 +12,7 @@ const isProd = nodeEnv === 'production'
 
 
 const sourcePath = path.join(__dirname, './app');
+const assetsPath = path.join(__dirname, './assets');
 const jsEntry = path.join(sourcePath, '/index.js')
 
 const staticsPath = path.join(__dirname, './public')
@@ -92,7 +93,6 @@ module.exports = {
   devtool: isProd ? 'source-map' : 'source-map',
   entry: [
     jsEntry,
-    './app/assets/sass/main.scss'
   ],
   output: {
     filename: getFilename('[name].js'),
@@ -157,6 +157,7 @@ module.exports = {
     },
     modules: [
       sourcePath,
+      assetsPath,
       'node_modules'
     ]
   },
