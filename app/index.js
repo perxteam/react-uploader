@@ -39,9 +39,8 @@ class UploaderContainer extends React.Component {
           onChange={this.handleChange}
           totalFilesSizeLimit={20000}
           fileSizeMax={20000}
-          fileSizeMin={1000}
           totalFilesCount={5}
-          fileExtensions='pdf,jpg,png,bmp,gif,tif'
+          fileExtensions='jpg,png,                      bmp,gif,     tif'
           actualDelete={false}
           value={this.state.files}
           miscFormData={{
