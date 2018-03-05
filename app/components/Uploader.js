@@ -12,7 +12,14 @@ const initialState = {
 }
 
 class Uploader extends Component {
-  state = initialState
+  constructor(props) {
+    super(props)
+    const { fileExtensions } = props
+    this.state = {
+      ...initialState,
+      fileExtensions: fileExtensions && fileExtensions.replace(/ /g, '').split(',').join(', ')
+    }
+  }
 
   componentWillReceiveProps(nextProps) {
     const { value } = nextProps
@@ -120,7 +127,6 @@ class Uploader extends Component {
       fileSizeMin,
       fileSizeMax,
       totalFilesSizeLimit,
-      fileExtensions,
       trailingSlash,
       errorProcessor,
       fileSizeMaxError,
@@ -139,6 +145,7 @@ class Uploader extends Component {
 
     onChangeFilesSelection(newfiles)
     let { files, totalSize, errors } = this.state
+    const { fileExtensions } = this.state
 
     const processError = errorProcessor || this.processError
     const uploadResult = Array.prototype.map.call(newfiles, (file, index) => {
