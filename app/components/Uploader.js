@@ -117,6 +117,17 @@ class Uploader extends Component {
 
   handleUpload = event => {
     const newfiles = event.target.files
+
+    // У IE есть баг - файловый input вызывает onChange три раза
+    // Первый вызов корректный - с файлами
+    // Все последующие уже __без__ файлов
+    // Из-за этого затираются ошибки
+    // В теории проверка на кол-во файлов и прерывание ф-ции в случае их отсутствия не должна ничего сломать
+    // Т.к. onChange без файлов невозможен
+    if (newfiles.length === 0) {
+      return;
+    }
+
     const {
       apiUrl,
       onChangeFilesSelection,
