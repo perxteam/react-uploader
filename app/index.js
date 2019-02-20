@@ -12,11 +12,6 @@ if (module.hot) {
   module.hot.accept()
 }
 
-/* eslint-disable global-require */
-if (!global._babelPolyfill) {
-  require('babel-polyfill')
-}
-
 class UploaderContainer extends React.Component {
   state = {
     files: [],
