@@ -3,9 +3,10 @@
   "plugins": [
       "react-hot-loader/babel",
       "transform-decorators-legacy",
-       [ "webpack-alias", {
-           "config": "webpack.config.build.lib.js"
-           }
-       ]
+      [ "webpack-alias", {
+          "config": "webpack.config.build.lib.js"
+          }
+      ],
+      "transform-runtime"
   ]
 }
